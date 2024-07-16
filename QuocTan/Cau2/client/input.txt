@@ -1,0 +1,2 @@
+File7.txt CRITICAL
+File6.txt HIGH
