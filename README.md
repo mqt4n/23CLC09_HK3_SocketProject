@@ -1,10 +1,14 @@
 # 23CLC09_HK3_SocketProject
+-----------------------------------------------------------------------------------------------------------
 
-kịch bản giao tiếp của server và client
-Vận hành phần I: Chương trình Client/Server cho phép nhiều Client download file từ 1 Server.
-Server sẽ phục vụ tuần tự từng Client.
+**Kịch bản giao tiếp của server và client**
 
-Phía server:
+**Vận hành phần I: Chương trình Client/Server cho phép nhiều Client download file từ 1 Server.**
+**Server sẽ phục vụ tuần tự từng Client.**
+
+-----------------------------------------------------------------------------------------------------------
+
+**Phía server:**
 - Server setup sẵn các địa chỉ IP và cổng để sẵn sàng khởi tạo socket
 - Sau khi khởi tạo socket và bind, server sẽ lắng nghe các kết nối của client
 - Khi có client kết nối tới server, server sẽ bắt đầu việc truyền tải file
@@ -30,7 +34,7 @@ Phía server:
   cầu nữa và đóng chương trình, server sẽ đóng kết nối với client và chờ để phục vụ các client
   mới kết nối đến.
 
-Phía client:
+**Phía client:**
 - Client sẽ có các thao tác trước khi kết nối đến server. Kiểm tra đã có folder chứa các file
   tải từ server chưa, nếu chưa thì khởi tạo folder đó. Tiếp để là nhờ các thông tin có được như
   địa chỉ IP và cổng của server, client sẽ tạo socket và kết nối đến server.
@@ -52,11 +56,16 @@ Phía client:
   từ phía server là "START", thì sẽ bắt đầu việc tải file đó giữa client và server.
 - 
 
-kịch bản giao tiếp của server và client
-Vận hành phần I: Chương trình Client/Server cho phép nhiều Client download file từ 1 Server.
-Server sẽ phục vụ song song các Client.
+-----------------------------------------------------------------------------------------------------------
 
-Phía server:
+**Kịch bản giao tiếp của server và client**
+
+**Vận hành phần II: Chương trình Client/Server cho phép nhiều Client download file từ 1 Server.**
+**Server sẽ phục vụ song song các Client.**
+
+-----------------------------------------------------------------------------------------------------------
+
+**Phía server:**
 
 - Cập nhật thư mục data, ghi tên, kích thước của từng file vào file_list.json
 
@@ -107,10 +116,7 @@ phục vụ cho từng client.
 
 - Và server chỉ tắt khi mình tự tắt, đảm bảo tính "always on host" của server.
 
-
------------------------------------------------------------------------------------------------------------
-
-Phía client:
+**Phía client:**
 
 - Đàu tiên, client sẽ kiểm tra sẽ rằng đã tồn tại folder output hay chưa, nếu chưa thì sẽ tạo để chứa các
   file cần tải của client.
