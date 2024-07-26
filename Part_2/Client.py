@@ -104,7 +104,7 @@ def main():
     modeName = ["NORMAL", "HIGH", "CRITICAL"]
     modeDownLoad = [1, 4, 10]
     output_folder = 'output'
-    scanTime = 10
+    scanTime = 2
 
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
