@@ -1,0 +1,37 @@
+[
+    {
+        "filename": "Client2.py",
+        "size": 15308,
+        "typeData": "B"
+    },
+    {
+        "filename": "File1.zip",
+        "size": 2204600,
+        "typeData": "B"
+    },
+    {
+        "filename": "File2.zip",
+        "size": 11511677,
+        "typeData": "B"
+    },
+    {
+        "filename": "File3.zip",
+        "size": 25027023,
+        "typeData": "B"
+    },
+    {
+        "filename": "File4.zip",
+        "size": 13628555,
+        "typeData": "B"
+    },
+    {
+        "filename": "File5.zip",
+        "size": 104857752,
+        "typeData": "B"
+    },
+    {
+        "filename": "File6.zip",
+        "size": 200,
+        "typeData": "MB"
+    }
+]
