@@ -1,0 +1,42 @@
+[
+    {
+        "filename": "100MB.zip",
+        "size": 100,
+        "typeData": "MB"
+    },
+    {
+        "filename": "10MB.zip",
+        "size": 10,
+        "typeData": "MB"
+    },
+    {
+        "filename": "1GB.zip",
+        "size": 1,
+        "typeData": "GB"
+    },
+    {
+        "filename": "200MB.zip",
+        "size": 200,
+        "typeData": "MB"
+    },
+    {
+        "filename": "20MB.zip",
+        "size": 20,
+        "typeData": "MB"
+    },
+    {
+        "filename": "50MB.zip",
+        "size": 50,
+        "typeData": "MB"
+    },
+    {
+        "filename": "512MB.zip",
+        "size": 512,
+        "typeData": "MB"
+    },
+    {
+        "filename": "fileekksjdjwjajsjdjwjaj.txt",
+        "size": 3640,
+        "typeData": "B"
+    }
+]
