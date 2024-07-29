@@ -56,12 +56,16 @@ def fillterDataNotFoundAndPrint(list404, list_file_not_found):
             list_file_not_found.append(items)
             globalVariable.announFirst += '\nFile ' + str(items['filename']) + ' not found in the list'
 
+def check_exist(file) : 
+	return os.path.isfile(file) 
+
 def fillterData(data, file_list, list404, list_download):
     for items in data:
         check = False
         for i in range(len(file_list)):
+	    FILE_PATH = os.path.join(output_folder, items["filename"].strip()) 	
             if items["filename"].strip() == file_list[i]["filename"]:
-                list_download.append(items)
+                if not check_exist(FILE_PATH) : list_download.append(items)
                 check = True
                 break
         if check == False:
