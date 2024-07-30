@@ -72,9 +72,12 @@ def main():
             print(f"File name: {file['file_name']} | Size: {file['size']} {file['typeData']}")
 
         NOT_FOUND = []
+	CHECK = [] 
         while True:
             file_name = 'input.txt'
             FILE_INPUT = readFile(file_name)
+	    if FILE_INPUT == CHECK : break 
+	    else : CHECK = FILE_INPUT
             for file in FILE_INPUT:
                 
                 FILE_NAME = file
