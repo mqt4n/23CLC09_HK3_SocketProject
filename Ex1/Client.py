@@ -50,11 +50,14 @@ def signal_func(sig, frame):
 
 def downloadFile(s, FILE_LIST_FROM_SERVER):
     NOT_FOUND = []
+    CHECK = [] 
     while True:
         if globalVariable.endProgram == True:
             exit(0)
         file_name = 'input.txt'
         FILE_INPUT = readFile(file_name)
+	if FILE_INPUT == CHECK : break 
+	else: CHECK = FILE_INPUT
         for file in FILE_INPUT:
             
             FILE_NAME = file
