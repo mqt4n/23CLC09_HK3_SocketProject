@@ -1,4 +1,7 @@
 # 23CLC09_HK3_SocketProject
+
+_link report: https://docs.google.com/document/d/1Y-v9ptRORQNd10V5OXOFEHTUPCYQeIdG/edit_
+
 **Vận hành phần I: Chương trình Client/Server cho phép nhiều Client download file từ 1 Server. Server sẽ phục vụ tuần tự từng Client.**
 
 **Phía server:**
