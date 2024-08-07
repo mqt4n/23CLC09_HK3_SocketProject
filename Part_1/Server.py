@@ -78,8 +78,8 @@ def main():
                                 data = file.read(1024) 
                                 if not data : break 
                                 client_socket.sendall(data) 
-                                client_socket.recv(1024).decode(FORMAT)
-                                
+
+                        client_socket.sendall('END'.encode(FORMAT))
                     else:
                         client_socket.sendall('File not found'.encode(FORMAT))
             except Exception as e:
@@ -89,4 +89,3 @@ def main():
 
 if __name__ == '__main__':
     main() 
-
