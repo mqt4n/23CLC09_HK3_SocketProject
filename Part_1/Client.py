@@ -1,92 +1,134 @@
+import json
 import os
 import socket
-import json
+import time
+import signal
+import sys
 
 HOST = '127.0.0.1'
 PORT = 12346
-FILE_DIRECTORY = './files'
-FILE_LIST_FILENAME = 'list.json'
+OUTPUT_DIRECTORY = 'output'
 FORMAT = "utf-8"
+nameOfTypeData = ['B','KB','MB','GB','TB']
 
-def convert_bytes(file_size):
-	nameOfTypeData = ["B", "KB", "MB", "GB", "TB"]
-	sizeOfTypeData = len(nameOfTypeData)
-	for i in range(sizeOfTypeData):
-		if file_size < 1024 or file_size%1024 != 0:
-			return int(file_size), nameOfTypeData[i]
-		file_size = file_size / 1024
+def removeEndLine(str ) : 
+	if str[len(str) - 1] == "\n" : return str[:len(str) - 1] 
+	else : return str 
 
-def write_file_list_to_json(folder_path, output_file='list.json'):
-    file_info_list = []
+def readFile(FILENAME) : 
+	if os.path.exists(FILENAME) : 
+		data = []
+		with open(FILENAME, 'r') as f : 
+			try : 
+				for line in f : 
+					data.append(removeEndLine(line) ) 
+				return data 				
+			except Exception : return [] 
+	else : return []
 
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            file_path = os.path.join(root, file)
-            file_size = os.path.getsize(file_path)
-            size, typeData = convert_bytes(file_size)
-            file_info_list.append({
-                "filename": file,
-                "size": size, 
-                "typeData": typeData
-            })
-    with open(output_file, 'w') as f : 
-        json.dump(file_info_list, f, indent=4) 
-
-
-data_path = "C:\\Users\\dn156\\source\\Networking\\Socket\\06-08\\test\\Part_1\\files"
-write_file_list_to_json(data_path, 'list.json')
-
-def load_file_list():
-    with open(FILE_LIST_FILENAME, 'r') as f:
-        return json.load(f)
-
-FILE_LIST = load_file_list()
 
 def file_exists(file_path):
     return os.path.isfile(file_path)
 
+def convert_size_to_bytes(size, type):
+    type = type.upper() 
+    if type == 'MB':
+        return int(size) * 1024 * 1024
+    elif type == 'GB':
+        return int(size) * 1024 * 1024 * 1024
+    elif type == 'KB': 
+         return int(size) * 1024 
+    elif type == 'B' : return int(size) 
+    else : 
+         return int(size) 
+
+def signal_func(sig, frame):
+    print("\nClient closing")
+    sys.exit(0)
+
 def main():
+    if not os.path.exists(OUTPUT_DIRECTORY):
+        os.makedirs(OUTPUT_DIRECTORY)
+
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind((HOST, PORT))
-        s.listen()
-        print(f"Server listening on {HOST}:{PORT}")
+        s.connect((HOST, PORT))
+        FILE_LIST_FROM_SERVER = []
+
         while True:
-            client_socket, addr = s.accept()
-            print(f"Connection from {addr}")
-            try:
-                for file in FILE_LIST:
-                    client_socket.sendall(file['filename'].encode(FORMAT))
-                    client_socket.recv(1024).decode(FORMAT)
-                    client_socket.sendall(str(file['size']).encode(FORMAT))
-                    client_socket.recv(1024).decode(FORMAT) 
-                    client_socket.sendall(file['typeData'].encode(FORMAT)) 
-                    client_socket.recv(1024).decode(FORMAT)
-                client_socket.sendall('END_LIST'.encode(FORMAT))
+            name = s.recv(1024).decode(FORMAT)
+            if name == 'END_LIST':
+                break
+            s.sendall('ACK'.encode(FORMAT)) 
+            size = s.recv(1024).decode(FORMAT)
+            s.sendall('ACK'.encode(FORMAT))
+            type = s.recv(1024).decode(FORMAT) 
+            s.sendall('ACK'.encode(FORMAT)) 
+            FILE_LIST_FROM_SERVER.append({'file_name': name, 'size': size, 'typeData': type}) 
 
+        
+        print(f"List of files from server: ")
+        for file in FILE_LIST_FROM_SERVER:
+            if file['typeData']=='B':
+                size = int(file['size'])
+                index = 0
+                while size>=1024:
+                      size/=1024
+                      index+=1
+                print(f"File name: {file['file_name']} | Size: {round(size,2)} {nameOfTypeData[index]}")
+            else:
+                print(f"File name: {file['file_name']} | Size: {file['size']} {file['typeData']}")
+
+        NOT_FOUND = []
+        CHECK = []
+        while True: 
+            file_name = 'input.txt' 
+            FILE_INPUT = readFile(file_name) 
+            if FILE_INPUT == CHECK : break 
+            else: CHECK = FILE_INPUT 
+            for file in FILE_INPUT:
                 
-                while True:
-                    FILE_NAME = client_socket.recv(1024).decode(FORMAT)
-                    if FILE_NAME == "END":
-                        break
+                FILE_NAME = file
+                SIZE = 0 
+                TYPE = ''
+                for f in FILE_LIST_FROM_SERVER: 
+                     if f['file_name'] == FILE_NAME : 
+                          SIZE = f['size']  
+                          TYPE = f['typeData'] 
+                          
+                FILE_PATH = os.path.join(OUTPUT_DIRECTORY, FILE_NAME)
 
-                    FILE_PATH = os.path.join(FILE_DIRECTORY, FILE_NAME)
-                    if file_exists(FILE_PATH):
-                        client_socket.sendall('START'.encode(FORMAT))
-                        client_socket.recv(1024).decode(FORMAT)
-                        with open(FILE_PATH, 'rb') as file:
+                check = 0 
+                for i in NOT_FOUND: 
+                     if i == FILE_NAME: 
+                          check = 1 
+                     
+                if not file_exists(FILE_PATH) and check == 0 : 
+                    s.sendall(FILE_NAME.encode(FORMAT))
+                    response = s.recv(1024).decode(FORMAT)
+                    if response == 'START' :
+                        s.sendall('ACK'.encode(FORMAT))
+                        with open(FILE_PATH, 'wb') as f:
+                            TOTAL_SIZE = convert_size_to_bytes(SIZE, TYPE )
+                            RECEIVED_SIZE = 0
+
                             while True:
-                                data = file.read(1024) 
-                                if not data : break 
-                                client_socket.sendall(data) 
-                                client_socket.recv(1024).decode(FORMAT)
-                                
-                    else:
-                        client_socket.sendall('File not found'.encode(FORMAT))
-            except Exception as e:
-                print(f"Closing connection with {addr}" )
-            finally:
-                client_socket.close()
+                                data = s.recv(1024)
+                                s.sendall('ACK'.encode(FORMAT))  
+                                RECEIVED_SIZE += len(data)
+                                if RECEIVED_SIZE >= TOTAL_SIZE : break
+                                NUMBER = round((RECEIVED_SIZE / TOTAL_SIZE) * 100 ) 
+                                print(f"Downloading {FILE_NAME}: {NUMBER:.2f}% complete", end='\r')
+                                f.write(data)
+                        print(f"\nDownload of {FILE_NAME} complete")
+                    else : 
+                        print(str(FILE_NAME) + " " + response ) 
+                        NOT_FOUND.append(FILE_NAME)    
 
 if __name__ == '__main__':
-    main() 
+    signal.signal(signal.SIGINT, signal_func)
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\nClient terminated.")
+
 
