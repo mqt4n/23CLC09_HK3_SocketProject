@@ -8,7 +8,6 @@ FILE_DIRECTORY = './files'
 FILE_LIST_FILENAME = 'list.json'
 FORMAT = "utf-8"
 
-
 def convert_bytes(file_size):
 	nameOfTypeData = ["B", "KB", "MB", "GB", "TB"]
 	sizeOfTypeData = len(nameOfTypeData)
@@ -33,7 +32,8 @@ def write_file_list_to_json(folder_path, output_file='list.json'):
     with open(output_file, 'w') as f : 
         json.dump(file_info_list, f, indent=4) 
 
-data_path = "C:\\Users\\dn156\\source\\Networking\\Socket\\Part_1\\files"
+
+data_path = "C:\\Users\\dn156\\source\\Networking\\Socket\\06-08\\test\\Part_1\\files"
 write_file_list_to_json(data_path, 'list.json')
 
 def load_file_list():
@@ -70,7 +70,6 @@ def main():
                         break
 
                     FILE_PATH = os.path.join(FILE_DIRECTORY, FILE_NAME)
-
                     if file_exists(FILE_PATH):
                         client_socket.sendall('START'.encode(FORMAT))
                         client_socket.recv(1024).decode(FORMAT)
@@ -79,8 +78,8 @@ def main():
                                 data = file.read(1024) 
                                 if not data : break 
                                 client_socket.sendall(data) 
-                            
-                        client_socket.sendall('END'.encode(FORMAT))
+                                client_socket.recv(1024).decode(FORMAT)
+                                
                     else:
                         client_socket.sendall('File not found'.encode(FORMAT))
             except Exception as e:
