@@ -5,6 +5,17 @@ import os
 import time
 import threading
 
+HOST = "127.0.0.1" # The server's hostname or IP address
+PORT = 65432 # The port used by the server
+FORMAT = "utf-8"
+nameTypeOfData = ["B","KB","MB","GB","TB"]
+BUFSIZE = 1024
+ACK = ""
+modeName = ["NORMAL", "HIGH", "CRITICAL"]
+modeDownLoad = [1, 4, 10]
+output_folder = 'output'
+scanTime = 10
+
 timeToScan = [0,0]
 check_ctrl_C= 1 
 
@@ -27,20 +38,24 @@ def fillterDataNotFoundAndPrint(list404, list_file_not_found):
     for items in list404:
         check = False
         for key in list_file_not_found:
-            if items == key:
                 check = True
                 break
         if check == False:
             list_file_not_found.append(items)
             print(f"File {items['filename']} not found in the list")
 
+def check_exist(file) : 
+    return os.path.isfile(file )
+
 def fillterData(data, file_list, list404, list_download):
     for items in data:
         check = False
         for i in range(len(file_list)):
+            FILE_PATH = os.path.join(output_folder, items["filename"].strip()) 
             if items["filename"].strip() == file_list[i]["filename"]:
-                list_download.append(items)
-                check = True
+                check = True 
+                if not check_exist(FILE_PATH) : 
+                    list_download.append(items)
                 break
         if check == False:
             list404.append(items)
@@ -94,17 +109,6 @@ def signal_handler(sig, frame, check):
     
     
 def main():
-
-    HOST = "127.0.0.1" # The server's hostname or IP address
-    PORT = 65432 # The port used by the server
-    FORMAT = "utf-8"
-    nameTypeOfData = ["B","KB","MB","GB","TB"]
-    BUFSIZE = 1024
-    ACK = ""
-    modeName = ["NORMAL", "HIGH", "CRITICAL"]
-    modeDownLoad = [1, 4, 10]
-    output_folder = 'output'
-    scanTime = 2
 
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
@@ -297,8 +301,7 @@ def main():
                 
             for items in data_require_after:
                 data_require_before.append(items)
-            
-            noficationFinishDownload()
+        
             
     except Exception as e:
         client.close()
