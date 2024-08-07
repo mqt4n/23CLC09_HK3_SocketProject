@@ -113,11 +113,12 @@ def main():
 
                             while True:
                                 data = s.recv(1024)
-                                s.sendall('ACK'.encode(FORMAT))  
                                 RECEIVED_SIZE += len(data)
-                                if RECEIVED_SIZE >= TOTAL_SIZE : break
                                 NUMBER = round((RECEIVED_SIZE / TOTAL_SIZE) * 100 ) 
                                 print(f"Downloading {FILE_NAME}: {NUMBER:.2f}% complete", end='\r')
+                                if data.endswith(b'END'):
+                                    f.write(data[:-3])
+                                    break
                                 f.write(data)
                         print(f"\nDownload of {FILE_NAME} complete")
                     else : 
@@ -130,5 +131,3 @@ if __name__ == '__main__':
         main()
     except KeyboardInterrupt:
         print("\nClient terminated.")
-
-
