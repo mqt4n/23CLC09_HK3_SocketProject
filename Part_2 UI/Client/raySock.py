@@ -301,5 +301,5 @@ def makeConsoleWindow(fileName):
 			drawFrontLayer(criticalMod, highMod, normalMod)
 
 			end_drawing()
-
+	globalVariable.endProgram = True
 	close_window()
