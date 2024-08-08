@@ -155,3 +155,4 @@ def makeConsoleWindow(fileName) :
 		printNameOfFileFromSever(box)
 		printBoxFileSV(box)
 		end_drawing()
+	globalVariable.endProgram = True
