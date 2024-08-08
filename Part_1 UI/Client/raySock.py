@@ -156,3 +156,4 @@ def makeConsoleWindow(fileName) :
 		printBoxFileSV(box)
 		end_drawing()
 	globalVariable.endProgram = True
+	close_window()
