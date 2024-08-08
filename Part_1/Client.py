@@ -110,11 +110,13 @@ def main():
                         with open(FILE_PATH, 'wb') as f:
                             TOTAL_SIZE = convert_size_to_bytes(SIZE, TYPE )
                             RECEIVED_SIZE = 0
-
-                            while True:
+                            while True :
                                 data = s.recv(1024)
                                 RECEIVED_SIZE += len(data)
-                                NUMBER = round((RECEIVED_SIZE / TOTAL_SIZE) * 100 ) 
+                                if TOTAL_SIZE != 0 : 
+                                    NUMBER = round((RECEIVED_SIZE / TOTAL_SIZE) * 100 ) 
+                                else : NUMBER = 100 
+                                if NUMBER >= 100 : NUMBER = 100  
                                 print(f"Downloading {FILE_NAME}: {NUMBER:.2f}% complete", end='\r')
                                 if data.endswith(b'END'):
                                     f.write(data[:-3])
