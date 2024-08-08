@@ -1,0 +1,17 @@
+[
+    {
+        "filename": "File1.txt",
+        "size": 0,
+        "typeData": "B"
+    },
+    {
+        "filename": "File2.txt",
+        "size": 0,
+        "typeData": "B"
+    },
+    {
+        "filename": "File3.txt",
+        "size": 0,
+        "typeData": "B"
+    }
+]
